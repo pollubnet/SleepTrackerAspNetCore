@@ -86,6 +86,8 @@ server {
 Spowoduje to, że wszystkie żądania HTTP skierowane do adresu IP naszej
 maszyny zostaną przekazane do serwera ASP.NET działającego "pod spodem".
 
-Potem wystarczy tylko restart nginxa: `sudo service nginx restart` i
-serwer powinien zacząć odpowiadać na nasze żądania serwując nam stronę
-ASP.NET Core pod Linuksem.
+Potem wystarczy tylko restart nginxa: `sudo service nginx restart` oraz
+uruchomienie naszej strony poprzez przejście do `/src/SleepTracker/` i
+wydanie komendy `dnx web` i po uruchomieniu serwera Kestrel nasz serwer
+powinien zacząć odpowiadać na nasze żądania serwując nam stronę ASP.NET
+Core pod Linuksem.
