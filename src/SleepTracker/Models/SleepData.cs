@@ -42,7 +42,7 @@ namespace SleepTracker.Models
                 var d = lines[i].Split(',');
                 d[0] = d[0].Replace("<pre>", "");
 
-                if (d[1] == "-1")
+                if (d[1].TrimEnd() == "-1")
                     break;
 
                 var s = new SleepMovements { Time = d[0], Movements = int.Parse(d[1]) };
