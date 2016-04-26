@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 
 namespace SleepTracker.Models
 {
+    // klasa reprezentująca sen ;-)
     public class SleepData
     {
         public DateTime Alarm { get; set; }
@@ -29,6 +30,7 @@ namespace SleepTracker.Models
         public List<SleepMovements> Data { get; set; }
         public DateTime WokeUp { get; set; }
 
+        // parsowanie plików z morpheuza
         public static SleepData Parse(string[] lines)
         {
             var result = new SleepData();
@@ -40,8 +42,10 @@ namespace SleepTracker.Models
             for (int i = 0; i < lines.Length -5; i++)
             {
                 var d = lines[i].Split(',');
+                // usuwanie zbędnego <pre> w pierwszej linijce
                 d[0] = d[0].Replace("<pre>", "");
 
+                // po napotkaniu pierwszego -1, ignoruj wszystko następne
                 if (d[1].TrimEnd() == "-1")
                     break;
 

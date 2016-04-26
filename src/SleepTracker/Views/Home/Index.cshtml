@@ -6,35 +6,37 @@
 
 <canvas id="myChart" width="400" height="200"></canvas>
 <script>
-var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [
-            @foreach (var d in Model.Data)
-            {
-                @Html.Raw(string.Format("\"{0}\",", d.Time))                
-            }
-        ],
-        datasets: [{
-                label: '# of movements',
-            fill: false,
-            data: [
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            // generowanie zbioru podpisów na podstawie tego, co mamy wpisane z naszego modelu
+            labels: [
                 @foreach (var d in Model.Data)
+            {
+                @Html.Raw(string.Format("\"{0}\",", d.Time))
+            }
+            ],
+            datasets: [{
+                label: '# of movements',
+                fill: false,
+                // wypełnianie danymi
+                data: [
+                    @foreach (var d in Model.Data)
                     {
                     @string.Format("{0},", d.Movements)
                     }
-            ]
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+                ]
             }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
-    }
-});
+    });
 </script>

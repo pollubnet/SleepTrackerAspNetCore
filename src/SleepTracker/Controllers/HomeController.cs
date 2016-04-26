@@ -30,30 +30,32 @@ namespace SleepTracker.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment _environment;
-
-        
-
+       
         public HomeController(IHostingEnvironment environment)
         {
             _environment = environment;
         }
 
-
+        // Akcja Index - domyślna akcja, która uruchamia się gdy ktoś wejdzie na stronę
         public IActionResult Index()
         {
+            // ładujemy plik z /uploads/data.txt i go parsujemy
             var uploads = Path.Combine(_environment.WebRootPath, "uploads");
             var lines = System.IO.File.ReadAllLines(Path.Combine(uploads, "data.txt"));
 
             SleepData data = SleepData.Parse(lines);
 
+            // i przekazujemy obiekt do widoku
             return View(data);
         }
 
+        // Akcja Load - pokazuje formularz ładowania nowego pliku
         public IActionResult Load()
         {
             return View();
         }
 
+        // Akcja Load - odbiera formularz ładowania pliku i zapisuje plik do /uploads/data.txt
         [HttpPost]
         public IActionResult Load(IFormFile file)
         {
