@@ -19,10 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.IO;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using SleepTracker.Models;
 
 namespace SleepTracker.Controllers
@@ -30,7 +30,7 @@ namespace SleepTracker.Controllers
     public class HomeController : Controller
     {
         private IHostingEnvironment _environment;
-       
+
         public HomeController(IHostingEnvironment environment)
         {
             _environment = environment;
@@ -61,7 +61,11 @@ namespace SleepTracker.Controllers
         {
             var uploads = Path.Combine(_environment.WebRootPath, "uploads");
             var fName = "data.txt";
-            file.SaveAs(Path.Combine(uploads, fName));
+
+            using (var fs = new FileStream(Path.Combine(uploads, fName), FileMode.CreateNew, FileAccess.ReadWrite))
+            {
+                file.CopyTo(fs);
+            }
 
             return RedirectToAction("Index");
         }
