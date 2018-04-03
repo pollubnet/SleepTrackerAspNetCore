@@ -3,7 +3,9 @@ Sleep Tracker
 
 **Program demonstracyjny ze spotkania grupy z 26 kwietnia 2016.**
 
-Aplikacja jest stworzona dla ASP.NET Core 1.0 RC1. Pozwala na upload 
+**Aktualizacja 3 marca 2018 - dostosowanie do .NET Core 2.0.**
+
+Aplikacja jest stworzona dla ASP.NET Core 2.0. Pozwala na upload 
 pliku tekstowego w określonym formacie, który to plik zawiera dane 
 dotyczące snu. Przykładowy plik już jest zawarty w repozytorium, 
 w `/src/SleepTracker/wwwroot/uploads/data.txt`.
@@ -16,47 +18,36 @@ powinno wykonać pobranie niezbędnych dodatkowych bibliotek, zarówno
 tych z ASP.NET, jak i tych pochodzących z Bowera (używamy Chart.js) 
 i NPM. Jeżeli używa się Visual Studio Code również samo powinno
 zaproponować pobranie niezbędnych dodatków, natomiast ręcznie należy
-pamiętać o wydaniu polecenia `dnu restore`.
+pamiętać o wydaniu polecenia `dotnet restore`.
 
 ## Uruchomienie pod Linuksem
-Serwer na Ubuntu 14.04 można skonfigurować zgodnie z oficjalnym 
-[poradnikiem](https://docs.asp.net/en/latest/getting-started/installing-on-linux.html#installing-on-ubuntu-14-04).
+Serwer na Ubuntu 17.10 (oraz innymi odmianami) można skonfigurować zgodnie z oficjalnym 
+[poradnikiem](https://www.microsoft.com/net/learn/get-started/linux/ubuntu17-10).
 
 W tym celu, należy:
 
-Zainstalować DNVM:
+Dodać feed paczek Microsoft:
 ```bash
-sudo apt-get install unzip curl
-curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-artful-prod artful main" > /etc/apt/sources.list.d/dotnetdev.list'
 ```
 
-Zainstalować aktualną wersję DNX oraz CoreCLR:
+Zainstalować aktualną wersję .NET Core SDK:
 
 ```bash
-sudo apt-get install libunwind8 gettext libssl-dev libcurl4-openssl-dev zlib1g libicu-dev uuid-dev
-dnvm upgrade -r coreclr
-```
-
-Zainstalować (ze źródeł) libuv:
-
-```bash
-sudo apt-get install make automake libtool curl
-curl -sSL https://github.com/libuv/libuv/archive/v1.8.0.tar.gz | sudo tar zxfv - -C /usr/local/src
-cd /usr/local/src/libuv-1.8.0
-sudo sh autogen.sh
-sudo ./configure
-sudo make
-sudo make install
-sudo rm -rf /usr/local/src/libuv-1.8.0 && cd ~/
-sudo ldconfig
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install dotnet-sdk-2.1.101
 ```
 
 Teraz możliwe będzie już uruchomienie projektu po przejściu do 
-katalogu `/src/SleepTracker` i po wydaniu polecenia `dnx web`.
+katalogu `/src/SleepTracker` i po wydaniu polecenia `dotnet run`.
 
-Niestety, domyślnie dnx web uruchamia się tylko na localhost na
-porcie 5000. Lepsze będzie uruchomienie np. serwera Nginx tak, aby
-odbierał on informacje z serwera Kestrel i przekazywał do nas.
+Skonfigurowany w tym projekcie dotnet run uruchamia się na wszystkich
+adresach IP na porcie 5000. Lepsze jednak będzie uruchomienie np. 
+serwera Nginx tak, aby odbierał on informacje z serwera Kestrel 
+i przekazywał do nas (reverse-proxy):
 
 Aby to zrobić, należy zainstalować nginx:
 
@@ -88,6 +79,6 @@ maszyny zostaną przekazane do serwera ASP.NET działającego "pod spodem".
 
 Potem wystarczy tylko restart nginxa: `sudo service nginx restart` oraz
 uruchomienie naszej strony poprzez przejście do `/src/SleepTracker/` i
-wydanie komendy `dnx web` i po uruchomieniu serwera Kestrel nasz serwer
+wydanie komendy `dotnet run` i po uruchomieniu serwera Kestrel nasz serwer
 powinien zacząć odpowiadać na nasze żądania serwując nam stronę ASP.NET
 Core pod Linuksem.
